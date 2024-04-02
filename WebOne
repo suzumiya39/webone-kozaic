@@ -1,0 +1,69 @@
+#!/bin/sh
+#
+# Required-Start: $remote_fs $syslog $network
+# Required-Stop: $remote_fs $syslog $network
+# processname: webone
+# description: WebOne HTTP Proxy Server
+#
+
+PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+DAEMON=/usr/local/bin/webone
+NAME=WEBONE
+USER=root
+
+export HOME=/tmp/
+
+start() {
+echo "Starting $NAME: "
+if [ -f /var/lock/$NAME.lck ]; then
+    echo "$NAME is Running. Aborting"
+    exit 1
+else
+    touch /var/lock/$NAME.lck
+
+start-stop-daemon --start --quiet --pidfile /var/run/$NAME.pid -m \
+                --startas $DAEMON --background
+echo "done."
+fi
+}
+
+stop () {
+echo "Shutting down $NAME: "
+start-stop-daemon --stop --quiet --pidfile /var/run/$NAME.pid
+if [ -f /var/lock/$NAME.lck ]; then
+    rm /var/lock/$NAME.lck
+echo "done."
+fi
+}
+
+status() {
+if [ -f /var/lock/$NAME.lck ]; then
+    echo "Running $NAME"
+else
+    echo "Not Runing $NAME"
+fi
+}
+
+restart() {
+stop
+sleep 5
+start
+}
+
+case "$1" in
+start)
+start
+;;
+stop)
+stop
+;;
+restart)
+restart
+;;
+status)
+status
+;;
+*)
+echo "Usage: $NAME {start|stop|restart|status}"
+exit 1
+esac
