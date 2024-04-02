@@ -24,3 +24,13 @@ jobs:
       run: dotnet tool install --global dotnet-zip && dotnet tool install --global dotnet-tarball && dotnet tool install --global dotnet-rpm && dotnet tool install --global dotnet-deb
     - name: Build
       run: bash ./build.sh
+    - name: Upload a Release
+      uses: actions/upload-artifact@v4.3.1
+      with:
+          name: Release
+          path: /home/runner/work/webone-kozaic/webone-kozaic/bin/Release/net6.0/
+    - name: Upload a ReleaseSC
+      uses: actions/upload-artifact@v4.3.1
+      with:
+          name: ReleaseSC
+          path: /home/runner/work/webone-kozaic/webone-kozaic/bin/ReleaseSC/net6.0/
