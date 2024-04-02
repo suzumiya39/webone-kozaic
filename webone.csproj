@@ -139,17 +139,16 @@ then
 	chmod 666 $WOCAKey
 fi
 
-if [ -f /bin/systemctl ]; then
-	systemctl daemon-reload
-	systemctl enable --now webone
+if [ -f /etc/init.d/ ]; then
+	update-rc.d webone defaults
 fi
 			]]>
 		</PostInstallScript>
 		<PreRemoveScript>
 			<![CDATA[
-if [ -f /bin/systemctl ]; then
-	systemctl stop webone
-	systemctl disable webone
+if [ -f /etc/init.d/ ]; then
+	/etc/init.d/webone stop
+	update-rc.d -f webone remove
 fi
 if [ -f /usr/bin/killall ]; then
 	killall webone || true
@@ -158,8 +157,8 @@ fi
 		</PreRemoveScript>
 		<PostRemoveScript>
 			<![CDATA[
-if [ -f /bin/systemctl ]; then
-	systemctl daemon-reload
+if [ -f /etc/init.d/ ]; then
+	rm /etc/init.d/webone
 fi
 			]]>
 		</PostRemoveScript>
@@ -206,8 +205,8 @@ fi
 	</ItemGroup>
 
 	<ItemGroup Condition="$(RuntimeIdentifier.Contains('linux'))">
-		<Content Include="webone.service" CopyToPublishDirectory="Always" LinuxFileMode="644">
-			<LinuxPath>/etc/systemd/system/webone.service</LinuxPath>
+		<Content Include="WebOne" CopyToPublishDirectory="Always" LinuxFileMode="775">
+			<LinuxPath>/etc/systemd/system/webone</LinuxPath>
 		</Content>
 		<Content Include="webone.logrotate" CopyToPublishDirectory="Always" LinuxFileMode="644">
 			<LinuxPath>/etc/logrotate.d/webone</LinuxPath>
