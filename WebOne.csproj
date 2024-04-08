@@ -205,9 +205,6 @@ fi
 	</ItemGroup>
 
 	<ItemGroup Condition="$(RuntimeIdentifier.Contains('linux'))">
-		<Content Include="WebOne" CopyToPublishDirectory="Always" LinuxFileMode="775">
-			<LinuxPath>/etc/init.d/webone</LinuxPath>
-		</Content>
 		<Content Include="webone.logrotate" CopyToPublishDirectory="Always" LinuxFileMode="644">
 			<LinuxPath>/etc/logrotate.d/webone</LinuxPath>
 		</Content>
